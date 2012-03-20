@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <title>Form Handling</title>
+
+  <style type="text/css" media="screen">
+
+  </style>
+  <script src="js/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/sammy-latest.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/sammy/plugins/sammy.template.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+    ;(function($) {
+      var app = $.sammy('#main', function() {
+        this.use('Template');
+        
+        this.debug = true;
+        var form_fields = null;
+
+        this.get('#/', function() {
+          this.app.swap('Click form!');
+        });
+
+        this.get('#/redirect', function() {
+          this.redirect('#/');
+        });
+
+        this.get('#/form', function() {
+          this.partial('files/form.html');
+        });
+
+        this.post('#/pretend/post/url', function() {
+          form_fields = this.params;
+          this.log($.param(form_fields.toHash()));
+          this.redirect('#/display');
+        });
+
+        this.get('#/display', function() {
+          if (form_fields) {
+            this.app.swap(form_fields.toHTML());
+          } else {
+            this.redirect('#/form')
+          }
+        });
+
+        this.get('#/search', function() {
+          this.partial('static/panel1.html');
+        });
+
+        this.get('#/panel2', function() {
+          this.partial('static/panel2.html');
+        });
+
+        this.get('#/panel3', function() {
+          this.partial('static/panel3.html');
+        });
+
+        this.get('#/history', function() {
+          this.searchStack = searchStack
+          this.partial('static/history.template');
+        });
+
+        var searchStack = []
+        var currentSearch = null;
+
+        this.post('#/search/results', function() {
+          var query = this.params['q'];
+          this.log("Query is ", query);
+          currentSearch = {
+              type: 'simple-kw',
+              query: query,
+              name: query
+          }
+          searchStack.push(currentSearch)
+          this.redirect('#search/results');
+        });
+        
+        this.get('#search/results', function() {
+          this.item = {currentSearch:currentSearch}
+          this.results = [
+            { icon: 'commit.png', type: 'commit', sha: '93ef43c08e7788828fb5250489ce7f52f9dc5389', label: "COH-123 Updating code", link: '#/commits/foo', text: '...the text...' },
+            { icon: 'commit.png', type: 'commit', sha: '93ef43c08e7788828fb5250489ce7f52f9dc5389', label: "COH-123 Updating code", link: '#/commits/foo', text: '...the text...' },
+            { icon: 'commit.png', type: 'commit', sha: '93ef43c08e7788828fb5250489ce7f52f9dc5389', label: "COH-123 Updating code", link: '#/commits/foo', text: '...the text...' },
+            ]
+          if (currentSearch == null) {
+            this.partial('static/panel2.html'); 
+          } else {
+            this.partial('static/results.template');
+          }
+        });
+
+      });
+
+      $(function() {
+        app.run('#/search');
+      });
+
+    })(jQuery);
+  </script>
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="top-menu">
+      <a href="#/search">New search</a> | 
+      <a href="#search/results">Results</a> | 
+      <a href="#/panel3">panel3</a> | 
+      <a href="#/history">History</a> 
+    </div>
+    <div id="main">
+    </div>
+  </div>
+</body>
+</html>

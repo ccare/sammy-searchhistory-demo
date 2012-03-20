@@ -1,0 +1,44 @@
+<h3>Results</h3>
+Search for <i><%= item.currentSearch.name %></i>.
+
+<ul class="results">
+    <% for ( var i = 0; i < results.length; i++ ) { %>
+    <li>
+        <img src="img/<%= results[i].icon %>" alt="<%= results[i].type %>" />
+        <p><a href="#/commits/<%= results[i].sha %>"><%= results[i].label %></a></p>
+        <p><%= results[i].sha.substr(0,10) %></p>
+        <p><%= results[i].text %></p>
+    </li>
+    <% } %>
+</ul>
+<!-- <table width="100%">
+    <thead>
+        <th>foo</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+    </tbody>
+</table> -->

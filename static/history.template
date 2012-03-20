@@ -1,0 +1,15 @@
+<h3>Search History</h3>
+
+<p>You have <%= searchStack.length %> recent searches in your history</p>
+
+<ul>
+<% for ( var i = 0; i < searchStack.length; i++ ) { %>
+    <li>
+        <form action="#/search/results" method="post">
+            <%= searchStack[i].name %>
+            <input type="hidden" name="q" value="<%= searchStack[i].query %>" />
+            <input type="submit" value="Re-run" />
+        </form>
+    </li>
+ <% } %>
+ </ul>
